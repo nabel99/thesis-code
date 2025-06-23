@@ -1,0 +1,9 @@
+unemployment rate: for population over 16
+
+per capita income: for individuals
+
+uninsured: proportion of civilian noninst_pop
+
+hs_graduate or higher: for pop 25 and over
+
+violent crime: homicide+rape_legacy+robbery+aggravated_assault
