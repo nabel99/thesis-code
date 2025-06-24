@@ -122,7 +122,7 @@ cols_needed <- c("State", "Total population", "Male", "Female", "18 to 24 years"
 # All people -> poverty rate
 
 
-selected_profiles_df <- selected_profiles_df_full %>% select(cols_needed)
+selected_profiles_df <- selected_profiles_df_full %>% select(all_of(cols_needed))
 
 selected_profiles_df <- selected_profiles_df %>% rename(`Poverty rate` = `All people`)
 str(selected_profiles_df)
@@ -177,6 +177,7 @@ df_joined$`Total unauthorized` <- ifelse(is.na(df_joined$`Total unauthorized`),
 # still missings in mexican unauth
 # make it per100k
 df_joined$unauthorized_total_100k <- df_joined$`Total unauthorized` / df_joined$`Total population` * 100000
+df_joined <- df_joined %>% select(-c("Total unauthorized", "Percentage of population unauthorized"))
 
 # RENAME columns
 str(df_joined)
@@ -196,8 +197,6 @@ df_joined <- df_joined %>%
     uninsured = `No health insurance coverage`,
     poverty_rate = `Poverty rate`,
     median_gross_rent = `Median gross rent (dollars)`,
-    unauthorized_total = `Total unauthorized`,
-    unauthorized_pct = `Percentage of population unauthorized`,
     unauthorized_mexican_pct = `Mexican percentage of unauthorized`
   )
 
@@ -218,6 +217,7 @@ df_joined$foreignborn_total_100k <- df_joined$foreignborn_total / df_joined$tota
 df_joined$foreignborn_Americas_100k <- df_joined$foreignborn_Americas_100k / df_joined$total_pop * 100000
 df_joined$foreignborn_Mexico_100k <- df_joined$foreignborn_Mexico_100k / df_joined$total_pop * 100000
 
+df_joined <- df_joined %>% select(-c("foreignborn_total"))
 # joining violent_crimes
 str(violent_crimes_df)
 violent_crimes_df_join <- violent_crimes_df %>% select(c("State", "violent_crime", "homicide", "rape_revised"))
@@ -246,9 +246,13 @@ df_joined <- df_joined %>% select(-c("drug_offenses"))
 # CHECK JOINED
 str(df_joined)
 colSums(is.na(df_joined))
-# decide what to do with unauthorized mexican pct
 
-# possibly remove unauthorized_total, decide to keep either pct or 100k
+# changed scope due to missings in Mexican unauthorized population, see reasoning in Chapter 2.4
+df_joined <- df_joined %>% select(-c("unauthorized_mexican_pct", "foreignborn_Americas_100k", "foreignborn_Mexico_100k")) 
+
+# pooling of outcome variables, see Chapter 2.4
+df_joined <- df_joined %>% select(-c("homicide_100k", "rape_100k"))
+
 
 # write csv into new file
-# check if every col needed is there
+#write.csv(df_joined, "data/df_joined.csv", row.names = FALSE)

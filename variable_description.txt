@@ -1,9 +1,20 @@
-unemployment rate: for population over 16
+State: U.S. state name  
+total_pop: Total population  
+male: Proportion of males  
+female: Proportion of females  
+age_18_24: Population aged 18–24  
+avg_household_size: Average household size  
+avg_family_size: Average family size  
+hs_grad_plus: Proportion of high school education or higher for population 25 years and over  
+unemployment_rate: Unemployment rate (percent) for population 16 years and over  
+median_household_income: Median household income (USD)  
+per_capita_income: Per capita income (USD)  
+uninsured: Percent of civilian noninstitutionalized population without health insurance  
+poverty_rate: Poverty rate (percent)  
+median_gross_rent: Median gross rent (USD)  
+unauthorized_total_100k: Unauthorized immigrant population per 100,000 people  
+foreignborn_total_100k: Foreign-born population per 100,000 people  
+violent_crime_100k: Violent crimes per 100,000 people  
+drug_offenses_100k: Drug-related offenses per 100,000 people  
 
-per capita income: for individuals
-
-uninsured: proportion of civilian noninst_pop
-
-hs_graduate or higher: for pop 25 and over
-
-violent crime: homicide+rape_legacy+robbery+aggravated_assault
+note: violent crime = homicide + rape + robbery + aggravated_assault
