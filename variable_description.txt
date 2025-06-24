@@ -9,9 +9,10 @@ hs_grad_plus: Proportion of high school education or higher for population 25 ye
 unemployment_rate: Unemployment rate (percent) for population 16 years and over  
 median_household_income: Median household income (USD)  
 per_capita_income: Per capita income (USD)  
-uninsured: Percent of civilian noninstitutionalized population without health insurance  
+uninsured: Proportion of civilian noninstitutionalized population without health insurance  
 poverty_rate: Poverty rate (percent)  
-median_gross_rent: Median gross rent (USD)  
+median_gross_rent: Median gross rent (USD)
+unauthorized_total_pct: Proportion of state population who are unauthorized immigrants  
 unauthorized_total_100k: Unauthorized immigrant population per 100,000 people  
 foreignborn_total_100k: Foreign-born population per 100,000 people  
 violent_crime_100k: Violent crimes per 100,000 people  

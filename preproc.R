@@ -177,7 +177,7 @@ df_joined$`Total unauthorized` <- ifelse(is.na(df_joined$`Total unauthorized`),
 # still missings in mexican unauth
 # make it per100k
 df_joined$unauthorized_total_100k <- df_joined$`Total unauthorized` / df_joined$`Total population` * 100000
-df_joined <- df_joined %>% select(-c("Total unauthorized", "Percentage of population unauthorized"))
+df_joined <- df_joined %>% select(-c("Total unauthorized"))
 
 # RENAME columns
 str(df_joined)
@@ -197,7 +197,8 @@ df_joined <- df_joined %>%
     uninsured = `No health insurance coverage`,
     poverty_rate = `Poverty rate`,
     median_gross_rent = `Median gross rent (dollars)`,
-    unauthorized_mexican_pct = `Mexican percentage of unauthorized`
+    unauthorized_mexican_pct = `Mexican percentage of unauthorized`,
+    unauthorized_total_pct = `Percentage of population unauthorized`
   )
 
 # joining foreign born
