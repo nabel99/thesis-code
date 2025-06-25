@@ -1,10 +1,18 @@
 library(tidyverse)
 library(TOSTER)
 
+# convert to 1k dollars
 
 df <- read.csv("./data/df_joined.csv")
 str(df)
 colSums(is.na(df))
+
+# convert to 1k dollars
+df <- df %>% mutate(across(c("median_household_income", "per_capita_income"), function(x) x/ 1000))
+
+# multiply proportions
+df <- df %>% mutate(across(c("male", "female", "age_18_24", "hs_grad_plus", "unemployment_rate",
+                             "uninsured", "poverty_rate", "unauthorized_total_pct"), function(x) x* 100))
 
 mean_crime <- mean(df$violent_crime_100k)
 mean_crime * 0.05
@@ -64,7 +72,7 @@ prop_eq_vars <- c("male", "age_18_24", "hs_grad_plus",
                     "violent_crime_100k")
 
 df_prop_eq <- df %>% select(all_of(prop_eq_vars))
-df_prop_eq$unauthorized_total_pct <- df_prop_eq$unauthorized_total_pct * 100 # for a unit increase to make sense
+# for a unit increase to make sense
 prop_linear_model <- lm(violent_crime_100k ~ ., data = df_prop_eq)
 summary_prop_lm <- summary(prop_linear_model)
 
@@ -72,8 +80,8 @@ summary_prop_lm <- summary(prop_linear_model)
 prop_coef_estimate <- summary_prop_lm$coefficients["unauthorized_total_pct", "Estimate"]
 prop_coef_se <- summary_prop_lm$coefficients["unauthorized_total_pct", "Std. Error"]
 
-prop_eqbound_lower <- -1 * (0.05 * mean(df_logged_eq$violent_crime_100k))
-prop_eqbound_upper <- 0.05 * mean(df_logged_eq$violent_crime_100k)
+prop_eqbound_lower <- -1 * (0.05 * mean(df_prop_eq$violent_crime_100k))
+prop_eqbound_upper <- 0.05 * mean(df_prop_eq$violent_crime_100k)
 
 res_prop_eqtuest <- TOSTER::tsum_TOST(
   m1 = prop_coef_estimate,
