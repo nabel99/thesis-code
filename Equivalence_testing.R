@@ -62,7 +62,10 @@ library(DoubleML)
 library(mlr3)
 library(mlr3learners)
 library(data.table)
-set.seed(9999)
+
+# for replication
+seed_var = 999
+set.seed(seed_var)
 
 # unauthorized_total_pct
 y_col <- "violent_crime_100k"
@@ -77,10 +80,15 @@ dml_data <- DoubleMLData$new(
   x_cols = x_cols
 )
 
-# ADJUST LEARNERS
+
 # standard random forest
 #learner <- lrn("regr.ranger", num.trees = 500, mtry = 3, min.node.size = 5)
-learner <- lrn("regr.cv_glmnet", alpha = 1)
+
+# Lasso, would need to calibrate
+#learner <- lrn("regr.cv_glmnet", alpha = 1)
+
+# linear regression
+learner <- lrn("regr.lm")
 
 # set up partial linear model
 dml_plr <- DoubleMLPLR$new(
