@@ -112,6 +112,7 @@ dml_se <- dml_plr$se
 
 # tsum_TOST calculates SE as SD/sqrt(n), so even though SE in DML is not calculated like that,
 # for the purpose of the equivalence test, this workaround is sufficient
+# t-test on df = 50 is very close to a z-test, justifiable by asymptotic normality
 
 res_dml_eqtuest <- TOSTER::tsum_TOST(
   m1 = dml_coef,
