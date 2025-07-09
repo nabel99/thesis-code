@@ -8,11 +8,13 @@ str(df)
 colSums(is.na(df))
 
 # convert to 1k dollars
-df <- df %>% mutate(across(c("median_household_income", "per_capita_income"), function(x) x/ 1000))
+df <- df %>% mutate(across(c("median_household_income", "per_capita_income"),
+                           function(x) x/ 1000))
 
 # multiply proportions
-df <- df %>% mutate(across(c("male", "female", "age_18_24", "hs_grad_plus", "unemployment_rate",
-                             "uninsured", "poverty_rate", "unauthorized_total_pct"), function(x) x * 100))
+df <- df %>% mutate(across(c("male", "female", "age_18_24", "hs_grad_plus", 
+                             "unemployment_rate", "uninsured", "poverty_rate", 
+                             "unauthorized_total_pct"), function(x) x * 100))
 
 mean_crime <- mean(df$violent_crime_100k)
 
@@ -23,8 +25,8 @@ eqbound_lower <- -1 * eqbound_upper
 
 # SIMPLE EQUIVALENCE TEST -------------------------------------------------
 # model with unauthorized immigrant proportion
-# eq bounds set at 5% change compared to mean, taken from Light and Miller (2018)
 
+# selected variables, see Section 3.1
 prop_eq_vars <- c("male", "age_18_24", "hs_grad_plus", 
                     "unemployment_rate", "median_household_income",
                     "poverty_rate", "unauthorized_total_pct",
@@ -81,10 +83,10 @@ dml_data <- DoubleMLData$new(
 )
 
 
-# standard random forest
+# random forest, would need tuning
 #learner <- lrn("regr.ranger", num.trees = 500, mtry = 3, min.node.size = 5)
 
-# Lasso, would need to calibrate
+# Lasso, would need tuning
 #learner <- lrn("regr.cv_glmnet", alpha = 1)
 
 # linear regression
@@ -93,7 +95,7 @@ learner <- lrn("regr.lm")
 # set up partial linear model
 dml_plr <- DoubleMLPLR$new(
   data = dml_data,
-  ml_g = learner,  # E[Y|X]
+  ml_g = learner,   # E[Y|X]
   ml_m = learner,   # E[D|X]
   n_folds = 2
 )
@@ -105,19 +107,20 @@ dml_plr$summary()
 
 # DML eq test
 # eqbounds the same
-# degrees of freedom irrelevant, because sample large enough for asymptotic normality
+# df irrelevant, because sample large enough for asymptotic normality
 
 dml_coef <- dml_plr$coef
 dml_se <- dml_plr$se
 
-# tsum_TOST calculates SE as SD/sqrt(n), so even though SE in DML is not calculated like that,
-# for the purpose of the equivalence test, this workaround is sufficient
-# t-test on df = 50 is very close to a z-test, justifiable by asymptotic normality
+# tsum_TOST calculates SE as SD/sqrt(n), so even though SE in DML is not
+# calculated like that, for the purpose of the equivalence test, this workaround
+# is sufficient t-test on df = 50 is very close to a z-test, justifiable by 
+# asymptotic normality
 
 res_dml_eqtuest <- TOSTER::tsum_TOST(
   m1 = dml_coef,
   mu = 0,
-  sd1 = dml_se * sqrt(n), # convert standard error to SD based on behaviour of tsum_TOST
+  sd1 = dml_se * sqrt(n), # convert SE to SD based on behaviour of tsum_TOST
   n1 = n,
   low_eqbound = eqbound_lower,
   high_eqbound = eqbound_upper,

@@ -30,7 +30,7 @@ violent_crimes_df <- violent_crimes_df %>%
                 property_crime, burglary, larceny, motor_vehicle_theft),
          convert_to_num))
 
-# trim elading and ending whitespace
+# trim leading and ending whitespace
 violent_crimes_df <- violent_crimes_df %>% mutate(across(c(state_abbr, state_name), stringr::str_trim))
 
 # legacy definition not applicable, caveats empty
@@ -56,8 +56,6 @@ colSums(is.na(drug_crimes_df))
 # UNAUTHORIZED IMMIGRANTS -------------------------------------------------
 unauth_immigrant_df <- read_excel("./data/SR_24.07.22_unauthorized-immigrants_table-3.xlsx", 
                                   sheet = "Data-edited")
-# calculate <5000s on percentages
-# handle missing percentages of Mexican immigrants for small values
 
 str(unauth_immigrant_df)
 
@@ -118,7 +116,6 @@ cols_needed <- c("State", "Total population", "Male", "Female", "18 to 24 years"
                  "Unemployment Rate", "Median household income (dollars)", "Per capita income (dollars)",
                  "No health insurance coverage", "All people", "Median gross rent (dollars)")
 
-# extra health insurance, household size, family size, poverty rate
 # All people -> poverty rate
 
 
@@ -174,12 +171,12 @@ df_joined$`Total unauthorized` <- ifelse(is.na(df_joined$`Total unauthorized`),
                                          round(df_joined$`Total population` * df_joined$`Percentage of population unauthorized`),
                                          df_joined$`Total unauthorized`)
 
-# still missings in mexican unauth
+# still missings in mexican unauthorized
 # make it per100k
 df_joined$unauthorized_total_100k <- df_joined$`Total unauthorized` / df_joined$`Total population` * 100000
 df_joined <- df_joined %>% select(-c("Total unauthorized"))
 
-# RENAME columns
+# rename columns
 str(df_joined)
 df_joined <- df_joined %>%
   rename(

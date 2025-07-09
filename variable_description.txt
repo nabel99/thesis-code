@@ -1,3 +1,5 @@
+Variables in df_joined.csv
+
 State: U.S. state name  
 total_pop: Total population  
 male: Proportion of males  
